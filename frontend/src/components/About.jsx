@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion, useAnimation } from "framer-motion";
 import { useInView } from "react-intersection-observer";
 import {
@@ -11,6 +11,7 @@ import {
   FaLeaf,
   FaBootstrap,
   FaCss3Alt,
+  FaExclamationTriangle,
 } from "react-icons/fa";
 
 // Skill Data
@@ -33,43 +34,103 @@ const About = () => {
   const [backendCrashed, setBackendCrashed] = useState(false);
   const [showCrashPopup, setShowCrashPopup] = useState(false);
   const pageControls = useAnimation();
+  const [easterEggPosition, setEasterEggPosition] = useState({ x: 0, y: 0 });
+  const easterEggRef = useRef(null);
 
   // Easter Egg Click Handler (Triggers Falling Animation)
   const handleEasterEggClick = async () => {
     setBackendCrashed(true);
 
-    // Shake the screen for a crash effect
+    // Shake effect for crash simulation
     await pageControls.start({
       x: [-5, 5, -5, 5, 0],
       transition: { duration: 0.4, ease: "easeInOut" },
     });
 
-    await skillControls.start((i) => ({
-      y: [0, Math.random() * 300 + 200], // Fall distance
-      rotate: [0, Math.random() * 360], // Random rotation
-      opacity: [1, 0], // Fade out as they fall
-      transition: { duration: 1.5, ease: "easeIn" },
-    }));
+    // Falling animation
+    await Promise.all(
+      skills.map((_, i) =>
+        skillControls.start((index) =>
+          index === i
+            ? {
+                y: [0, Math.random() * 300 + 200], // Fall distance
+                rotate: [0, Math.random() * 360], // Random rotation
+                opacity: [1, 0], // Fade out as they fall
+                transition: { duration: 1.5, ease: "easeIn" },
+              }
+            : {}
+        )
+      )
+    );
 
-    // Delay before showing crash popup
-    setTimeout(() => setShowCrashPopup(true), 1600);
+    // Only after all skills fall off, show crash popup
+    setTimeout(() => setShowCrashPopup(true), 100);
   };
 
   // Restore Skills
   const restoreSkills = async () => {
-    setShowCrashPopup(false); // Hide popup
+    setShowCrashPopup(false);
 
-    await skillControls.start({ y: 0, rotate: 0, opacity: 1, transition: { duration: 1, ease: "easeOut" } });
+    await skillControls.start((i) => ({
+      y: [200, -10, 0], // Start below, slightly overshoot, then settle
+      rotate: [Math.random() * 360, 0], // Rotate back to normal
+      opacity: [0, 1], // Fade back in
+      scale: [0.8, 1.1, 1], // Slight bounce effect
+      transition: { duration: 1.2, ease: "easeOut", delay: i * 0.05 },
+    }));
 
     setBackendCrashed(false);
   };
+
+  useEffect(() => {
+    const moveEasterEgg = () => {
+      if (easterEggRef.current) {
+        const maxX = window.innerWidth - easterEggRef.current.offsetWidth;
+        const maxY = window.innerHeight - easterEggRef.current.offsetHeight;
+
+        const randomX = Math.random() * maxX;
+        const randomY = Math.random() * maxY;
+
+        setEasterEggPosition({ x: randomX, y: randomY });
+
+        // Random Motion
+        const randomMotionX = Math.random() * 20 - 10;
+        const randomMotionY = Math.random() * 20 - 10;
+
+        setEasterEggPosition((prev) => ({
+          x: Math.max(0, Math.min(maxX, prev.x + randomMotionX)),
+          y: Math.max(0, Math.min(maxY, prev.y + randomMotionY)),
+        }));
+      }
+    };
+
+    moveEasterEgg();
+    const intervalId = setInterval(moveEasterEgg, 2000); // Move every 2 seconds
+
+    return () => clearInterval(intervalId);
+  }, []);
 
   return (
     <motion.section
       animate={pageControls}
       className="py-16 bg-gray-100 dark:bg-black text-black dark:text-white transition-colors duration-300 relative overflow-hidden"
     >
-      <div className="max-w-6xl mx-auto px-6 md:px-12">
+      <div className="max-w-6xl mx-auto px-6 md:px-12 relative">
+        {/* Floating API Button */}
+        {!backendCrashed && (
+          <motion.button
+            ref={easterEggRef}
+            onClick={handleEasterEggClick}
+            className="absolute bg-blue-600 text-white py-2 px-4 rounded-full shadow-md hover:bg-blue-700 transition cursor-pointer"
+            style={{ left: easterEggPosition.x, top: easterEggPosition.y }}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 0.5 }}
+          >
+            API
+          </motion.button>
+        )}
+
         {/* Title */}
         <motion.h2
           initial={{ opacity: 0, y: -20 }}
@@ -90,95 +151,85 @@ const About = () => {
           >
             <p className="text-lg leading-relaxed">
               Hi, I'm <span className="font-semibold">Declan Munene</span>, a backend developer specializing in
-              <span className="text-gray-600 dark:text-gray-300 font-semibold"> Django & RESTful APIs</span>. I design
-              and build scalable, high-performance backend systems that power modern web applications.
+              <span className="text-gray-600 dark:text-gray-300 font-semibold"> Django & RESTful APIs</span>.
             </p>
             <p className="mt-4 text-lg leading-relaxed">
               With a background in <span className="font-semibold">Electronics and Computer Engineering</span>, I have a
-              deep understanding of system architecture and software development. I have worked as a{" "}
-              <span className="font-semibold">Project Manager</span> (6 months, contract) and have experience in
-              freelancing.
+              deep understanding of system architecture and software development.
             </p>
-
-            {/* Backup Easter Egg Button */}
-            {!backendCrashed && (
-              <button
-                onClick={handleEasterEggClick}
-                className="mt-6 bg-blue-600 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-700 transition"
-              >
-                Oops, missed something? Click me!
-              </button>
-            )}
           </motion.div>
 
-          {/* Right Side - Skills & Animation */}
+          {/* Right Side - Skills OR Warning Message */}
           <motion.div
             ref={ref}
             initial={{ opacity: 0 }}
             animate={{ opacity: inView ? 1 : 0 }}
             transition={{ duration: 0.7, ease: "easeOut", delay: 0.2 }}
-            className="grid grid-cols-3 md:grid-cols-3 gap-6 md:w-1/2 relative"
+            className="md:w-1/2 relative"
           >
-            {skills.map((skill, index) => (
+            {!showCrashPopup ? (
+              <div className="grid grid-cols-3 md:grid-cols-3 gap-6">
+                {skills.map((skill, index) => (
+                  <motion.div
+                    key={index}
+                    className="relative flex justify-center items-center w-24 h-24 md:w-28 md:h-28"
+                    custom={index}
+                    animate={skillControls}
+                    initial={{ y: 0, rotate: 0 }}
+                  >
+                    <svg className="absolute w-full h-full">
+                      <circle
+                        cx="50%"
+                        cy="50%"
+                        r="40%"
+                        stroke="#ccc"
+                        strokeWidth="4"
+                        fill="transparent"
+                      />
+                      <motion.circle
+                        cx="50%"
+                        cy="50%"
+                        r="40%"
+                        stroke={skill.icon.props.className.split(" ")[1]}
+                        strokeWidth="4"
+                        fill="transparent"
+                        strokeDasharray={`${skill.percentage * 2.51}, 251`}
+                        style={{ transformOrigin: "50% 50%", transform: "rotate(-90deg)" }}
+                        initial={{ strokeDashoffset: 251 }}
+                        animate={{ strokeDashoffset: 251 - skill.percentage * 2.51 }}
+                        transition={{
+                          duration: 1.2, ease: "easeInOut"
+                        }}
+                      />
+                    </svg>
+                    <div className="absolute flex flex-col items-center">
+                      {skill.icon}
+                      <span className="text-xs font-semibold mt-1">{skill.name}</span>
+                    </div>
+                  </motion.div>
+                ))}
+              </div>
+            ) : (
               <motion.div
-                key={index}
-                className="relative flex justify-center items-center w-24 h-24 md:w-28 md:h-28"
-                custom={index}
-                animate={skillControls}
-                initial={{ y: 0, rotate: 0 }}
+                className="bg-yellow-500 text-black p-6 rounded-lg shadow-lg flex flex-col items-center"
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.5 }}
               >
-                {/* Circular Progress Animation */}
-                <svg className="absolute w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-                  <circle className="text-gray-300 dark:text-gray-600" strokeWidth="6" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
-                  <motion.circle
-                    className="text-blue-500"
-                    strokeWidth="6"
-                    strokeLinecap="round"
-                    stroke="currentColor"
-                    fill="transparent"
-                    r="40"
-                    cx="50"
-                    cy="50"
-                    strokeDasharray="251.2"
-                    strokeDashoffset={251.2 - (skill.percentage / 100) * 251.2}
-                    initial={{ strokeDashoffset: 251.2 }}
-                    animate={{ strokeDashoffset: 251.2 - (skill.percentage / 100) * 251.2 }}
-                    transition={{ duration: 1.5, ease: "easeOut" }}
-                  />
-                </svg>
-                <div className="absolute flex flex-col items-center">
-                  {skill.icon}
-                  <span className="text-xs font-semibold mt-1">{skill.name}</span>
-                </div>
+                <FaExclamationTriangle className="text-5xl mb-3 text-black" />
+                <h2 className="text-lg font-bold">⚠️ Server Crash Detected! ⚠️</h2>
+                <p className="text-center mt-2">The backend has stopped responding. Click below to reboot.</p>
+                <button
+                  onClick={restoreSkills}
+                  className="mt-4 bg-black text-yellow-500 px-4 py-2 rounded-lg shadow-md hover:bg-gray-900 transition"
+                >
+                  Restart Server
+                </button>
               </motion.div>
-            ))}
+            )}
           </motion.div>
         </div>
       </div>
-
-      {/* Easter Egg - Floating API Icon */}
-      {!backendCrashed && (
-        <motion.div
-          className="absolute w-10 h-10 bg-blue-500 text-white rounded-full flex items-center justify-center shadow-lg cursor-pointer"
-          animate={{ x: ["1000%", "-300%"], y: ["0%", "400%", "-700%"], rotate: [0, 30, -30] }}
-          transition={{ repeat: Infinity, duration: 12, ease: "easeInOut" }}
-          onClick={handleEasterEggClick}
-        >
-          <span className="text-sm font-bold">API</span>
-        </motion.div>
-      )}
-
-      {/* Crash Popup */}
-      {showCrashPopup && (
-        <motion.div className="fixed inset-0 bg-black bg-opacity-75 flex items-center justify-center">
-          <div className="bg-white p-6 rounded-lg shadow-lg text-center">
-            <h2 className="text-xl font-bold">Oops, the server has crashed!</h2>
-            <button onClick={restoreSkills} className="mt-4 bg-blue-600 text-white px-4 py-2 rounded-lg">
-              Click here to boot up server
-            </button>
-          </div>
-        </motion.div>
-      )}
     </motion.section>
   );
 };
