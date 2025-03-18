@@ -112,6 +112,7 @@ const About = () => {
 
   return (
     <motion.section
+      id="about"
       animate={pageControls}
       className="py-16 bg-gray-100 dark:bg-black text-black dark:text-white transition-colors duration-300 relative overflow-hidden"
     >
@@ -121,7 +122,7 @@ const About = () => {
           <motion.button
             ref={easterEggRef}
             onClick={handleEasterEggClick}
-            className="absolute bg-blue-600 text-white py-2 px-4 rounded-full shadow-md hover:bg-blue-700 transition cursor-pointer"
+            className="absolute bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-md hover:bg-blue-700 transition cursor-pointer"
             style={{ left: easterEggPosition.x, top: easterEggPosition.y }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -129,6 +130,7 @@ const About = () => {
           >
             API
           </motion.button>
+          
         )}
 
         {/* Title */}
@@ -157,6 +159,12 @@ const About = () => {
               With a background in <span className="font-semibold">Electronics and Computer Engineering</span>, I have a
               deep understanding of system architecture and software development.
             </p>
+            <button
+              onClick={handleEasterEggClick}
+              className="mt-6 bg-blue-600 text-white px-4 py-2 rounded-lg shadow-md hover:bg-blue-700 transition"
+            >
+              If you're too lazy to chase the API, click here
+            </button>           
           </motion.div>
 
           {/* Right Side - Skills OR Warning Message */}

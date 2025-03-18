@@ -8,6 +8,9 @@ module.exports = {
   theme: {
     extend: {
       // Extend your theme here if needed
+      fontFamily: {
+        sans: ["Tektur", "sans-serif"],
+      },
     },
   },
   plugins: [],

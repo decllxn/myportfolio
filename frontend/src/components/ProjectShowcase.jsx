@@ -41,7 +41,7 @@ const cardVariants = {
 
 const ProjectsShowcase = () => {
   return (
-    <section className="py-20 bg-white text-black transition-colors duration-300">
+    <section id="projects" className="py-20 bg-white text-black transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 md:px-12">
         {/* Section Title */}
         <motion.h2

@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Menu, X, Sun, Moon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 
@@ -10,24 +9,44 @@ const Navbar = ({ theme, setTheme }) => {
     setTheme(theme === 'dark' ? 'light' : 'dark');
   };
 
+  // Enhanced Smooth Scroll Function
+  const handleScroll = (id) => {
+    setIsOpen(false); // Close mobile menu
+
+    const target = document.getElementById(id);
+    if (target) {
+      const yOffset = -80; // Adjust for navbar height
+      const y = target.getBoundingClientRect().top + window.scrollY + yOffset;
+
+      window.scrollTo({
+        top: y,
+        behavior: 'smooth',
+      });
+    }
+  };
+
   return (
     <nav className="fixed top-0 left-0 w-full z-50 bg-white text-black shadow-lg dark:bg-black dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="text-2xl font-bold tracking-wide uppercase">
+        <a href="#" className="text-2xl font-bold tracking-wide uppercase">
           Declan
-        </Link>
+        </a>
 
         {/* Desktop Menu */}
         <ul className="hidden md:flex space-x-8 text-lg">
-          {['Home', 'About', 'Projects', 'Contact'].map((item, index) => (
+          {['Home', 'About', 'Projects', 'Testimonials', 'Contact'].map((item, index) => (
             <li key={index} className="group relative">
-              <Link
-                to={item.toLowerCase()}
+              <a
+                href={`#${item.toLowerCase()}`}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleScroll(item.toLowerCase());
+                }}
                 className="transition-all duration-300 hover:text-gray-600 dark:hover:text-gray-400"
               >
                 {item}
-              </Link>
+              </a>
               <span className="absolute left-0 bottom-0 w-0 h-[2px] bg-gray-500 dark:bg-gray-600 transition-all duration-300 group-hover:w-full"></span>
             </li>
           ))}
@@ -66,7 +85,7 @@ const Navbar = ({ theme, setTheme }) => {
             </button>
 
             {/* Animated Menu Items */}
-            {['Home', 'About', 'Projects', 'Contact'].map((item, index) => (
+            {['Home', 'About', 'Projects', 'Testimonials', 'Contact'].map((item, index) => (
               <motion.div
                 key={index}
                 initial={{ opacity: 0, y: 20 }}
@@ -74,13 +93,16 @@ const Navbar = ({ theme, setTheme }) => {
                 exit={{ opacity: 0, y: -20 }}
                 transition={{ delay: index * 0.1, duration: 0.3 }}
               >
-                <Link
-                  to={item.toLowerCase()}
+                <a
+                  href={`#${item.toLowerCase()}`}
                   className="transition-all duration-300 hover:text-gray-600 dark:hover:text-gray-400 text-xl font-semibold"
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleScroll(item.toLowerCase());
+                  }}
                 >
                   {item}
-                </Link>
+                </a>
               </motion.div>
             ))}
           </motion.div>

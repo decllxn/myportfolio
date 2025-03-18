@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
-    <section className="h-screen flex items-center justify-center bg-white text-black transition-colors duration-300 pt-24 md:pt-0">
+    <section id="home" className="relative min-h-screen flex items-center justify-center bg-white text-black transition-colors duration-300 mt-20 md:mt-24 pb-20 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center px-6 md:px-12">
         
         {/* Left Side: Text Content */}

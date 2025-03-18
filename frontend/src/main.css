@@ -1,1 +1,13 @@
 @import 'tailwindcss';
+
+
+body {
+    font-family: "Tektur", sans-serif;
+}
+
+/* Prevent horizontal scroll */
+html, body {
+    overflow-x: hidden;
+    width: 100%;
+}
+  

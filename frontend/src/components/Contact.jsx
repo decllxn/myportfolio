@@ -3,7 +3,7 @@ import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
 
 const Contact = () => {
   return (
-    <section className="py-20 bg-white text-black transition-colors duration-300">
+    <section id="contact" className="py-20 bg-white text-black transition-colors duration-300">
       <div className="max-w-5xl mx-auto px-6">
         {/* Title */}
         <motion.h2
