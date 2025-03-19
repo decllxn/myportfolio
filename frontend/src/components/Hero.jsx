@@ -1,7 +1,10 @@
 import { motion } from "framer-motion";
-import { Link } from "react-router-dom";
 
 const Hero = () => {
+  const scrollToSection = (id) => {
+    document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <section id="home" className="relative min-h-screen flex items-center justify-center bg-white text-black transition-colors duration-300 mt-20 md:mt-24 pb-20 overflow-hidden">
       <div className="max-w-7xl mx-auto flex flex-col-reverse md:flex-row items-center px-6 md:px-12">
@@ -24,20 +27,20 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="mt-6 flex justify-center md:justify-start space-x-4">
-            <Link
-              to="/projects"
+            <button
+              onClick={() => scrollToSection("projects")}
               className="px-6 py-3 bg-black text-white rounded-full 
                          font-semibold text-lg transition-all duration-300 hover:scale-105 shadow-lg"
             >
               View My Work
-            </Link>
-            <Link
-              to="/contact"
+            </button>
+            <button
+              onClick={() => scrollToSection("contact")}
               className="px-6 py-3 border-2 border-black rounded-full 
                          font-semibold text-lg transition-all duration-300 hover:bg-black hover:text-white shadow-lg"
             >
               Get in Touch
-            </Link>
+            </button>
           </div>
         </motion.div>
 

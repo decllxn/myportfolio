@@ -1,4 +1,5 @@
 import { motion } from "framer-motion";
+import { Link } from "react-router-dom";
 
 const Footer = () => {
   return (
@@ -11,20 +12,23 @@ const Footer = () => {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6, ease: "easeOut" }}
         >
-          <motion.a
-            href="#"
-            className="hover:text-white transition duration-300"
-            whileHover={{ scale: 1.1 }}
-          >
-            Privacy Policy
-          </motion.a>
-          <motion.a
-            href="#"
-            className="hover:text-white transition duration-300"
-            whileHover={{ scale: 1.1 }}
-          >
-            Terms of Service
-          </motion.a>
+          <motion.div whileHover={{ scale: 1.1 }}>
+            <Link
+              to="/policy"
+              className="hover:text-white transition duration-300"
+            >
+              Privacy Policy
+            </Link>
+          </motion.div>
+
+          <motion.div whileHover={{ scale: 1.1 }}>
+            <Link
+              to="/terms"
+              className="hover:text-white transition duration-300"
+            >
+              Terms of Service
+            </Link>
+          </motion.div>
         </motion.div>
 
         {/* Copyright Text */}

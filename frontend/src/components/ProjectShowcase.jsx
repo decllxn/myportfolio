@@ -7,22 +7,22 @@ const projects = [
     name: "Portfolio Website",
     description: "A sleek and interactive portfolio showcasing my projects, built with React and Django.",
     liveLink: "#",
-    githubLink: "#",
-    image: "/images/portfolio.png", // Replace with actual image
+    githubLink: "https://github.com/decllxn/myportfolio",
+    image: "/Portfolio.jpg", 
   },
   {
     name: "API Management System",
     description: "A RESTful API management platform with authentication and monitoring.",
     liveLink: "#",
-    githubLink: "#",
-    image: "/images/api-system.png",
+    githubLink: "https://github.com/decllxn/event-management-api",
+    image: "/API.avif",
   },
   {
     name: "E-commerce Platform",
     description: "A fully functional e-commerce website with product management and payments.",
-    liveLink: "#",
-    githubLink: "#",
-    image: "/images/ecommerce.png",
+    liveLink: "https://supermarketbeisawa.netlify.app/",
+    githubLink: "https://github.com/decllxn/beisawa_completed",
+    image: "/Beisawa.jpg",
   },
 ];
 
