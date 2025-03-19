@@ -80,21 +80,21 @@ const Contact = () => {
             {/* Social Links */}
             <div className="flex space-x-6">
               <motion.a
-                href="#"
+                href="https://github.com/decllxn"
                 className="text-3xl text-black hover:text-gray-600 transition"
                 whileHover={{ scale: 1.2 }}
               >
                 <FaGithub />
               </motion.a>
               <motion.a
-                href="#"
+                href="https://www.linkedin.com/in/declan-munene-b4ab45278/"
                 className="text-3xl text-black hover:text-gray-600 transition"
                 whileHover={{ scale: 1.2 }}
               >
                 <FaLinkedin />
               </motion.a>
               <motion.a
-                href="#"
+                href="https://x.com/Decllaan"
                 className="text-3xl text-black hover:text-gray-600 transition"
                 whileHover={{ scale: 1.2 }}
               >
