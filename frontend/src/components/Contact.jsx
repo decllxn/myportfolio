@@ -1,9 +1,37 @@
+import { useState } from "react";
 import { motion } from "framer-motion";
 import { FaGithub, FaLinkedin, FaTwitter } from "react-icons/fa";
+import { submitContactForm } from "../api";
 
 const Contact = () => {
+  const [formData, setFormData] = useState({ name: "", email: "", message: "" });
+  const [popupMessage, setPopupMessage] = useState("");
+  const [popupVisible, setPopupVisible] = useState(false);
+  const [popupSuccess, setPopupSuccess] = useState(false);
+
+  // Handle input changes
+  const handleChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  // Handle form submission
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await submitContactForm(formData);
+      setPopupMessage("Message Successfully Delivered!");
+      setPopupSuccess(true);
+      setFormData({ name: "", email: "", message: "" });
+    } catch (error) {
+      setPopupMessage("Failed to send message. Try again.");
+      setPopupSuccess(false);
+    }
+    setPopupVisible(true);
+    setTimeout(() => setPopupVisible(false), 3000); // Auto-hide popup
+  };
+
   return (
-    <section id="contact" className="py-20 bg-white text-black transition-colors duration-300">
+    <section id="contact" className="py-20 bg-white text-black transition-colors duration-300 relative">
       <div className="max-w-5xl mx-auto px-6">
         {/* Title */}
         <motion.h2
@@ -18,6 +46,7 @@ const Contact = () => {
         <div className="grid md:grid-cols-2 gap-12">
           {/* Contact Form */}
           <motion.form
+            onSubmit={handleSubmit}
             className="space-y-6 bg-gray-100 p-8 rounded-lg shadow-lg"
             initial={{ opacity: 0, y: 50 }}
             animate={{ opacity: 1, y: 0 }}
@@ -27,6 +56,9 @@ const Contact = () => {
               <label className="block text-lg font-semibold">Name</label>
               <motion.input
                 type="text"
+                name="name"
+                value={formData.name}
+                onChange={handleChange}
                 placeholder="Your Name"
                 className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition"
                 whileFocus={{ scale: 1.05 }}
@@ -37,6 +69,9 @@ const Contact = () => {
               <label className="block text-lg font-semibold">Email</label>
               <motion.input
                 type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
                 placeholder="Your Email"
                 className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition"
                 whileFocus={{ scale: 1.05 }}
@@ -46,6 +81,9 @@ const Contact = () => {
             <div>
               <label className="block text-lg font-semibold">Message</label>
               <motion.textarea
+                name="message"
+                value={formData.message}
+                onChange={handleChange}
                 placeholder="Your Message"
                 rows="4"
                 className="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-black transition"
@@ -104,6 +142,20 @@ const Contact = () => {
           </motion.div>
         </div>
       </div>
+
+      {/* Success/Error Popup */}
+      {popupVisible && (
+        <motion.div
+          className={`fixed top-0 left-1/2 transform -translate-x-1/2 mt-5 p-4 rounded-lg shadow-lg text-white ${
+            popupSuccess ? "bg-green-500" : "bg-red-500"
+          } z-150`}         
+          initial={{ opacity: 0, scale: 0.8 }}
+          animate={{ opacity: 1, scale: 1 }}
+          exit={{ opacity: 0, scale: 0.8 }}
+        >
+          {popupMessage}
+        </motion.div>
+      )}
     </section>
   );
 };

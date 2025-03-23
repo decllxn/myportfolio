@@ -6,6 +6,8 @@ import { lazy, Suspense, useState, useEffect } from 'react';
 const Home = lazy(() => import('./Pages/Home'));
 const Terms = lazy(() => import('./Pages/Terms'));
 const Policy = lazy(() => import('./Pages/Policy'));
+const Loader = lazy(() => import('./components/Loader'));
+const Cert = lazy(() => import('./Pages/Cert'));
 
 function App() {
   const [theme, setTheme] = useState(localStorage.getItem('theme') || 'dark');
@@ -26,11 +28,12 @@ function App() {
   return (
     <Router>
       <div className={theme}>
-        <Suspense fallback={<div className="text-center text-black dark:text-white mt-10">Loading...</div>}>
+        <Suspense fallback={<Loader />}>
           <Routes>
             <Route path="/" element={<Home setTheme={setTheme} theme={theme} />} />
             <Route path="/terms" element={<Terms />} />
             <Route path="/policy" element={<Policy />} />
+            <Route path="/certificates" element={<Cert />} />
           </Routes>
         </Suspense>
       </div>

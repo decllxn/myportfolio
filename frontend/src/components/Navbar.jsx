@@ -26,7 +26,7 @@ const Navbar = ({ theme, setTheme }) => {
   };
 
   return (
-    <nav className="fixed top-0 left-0 w-full z-50 bg-white text-black shadow-lg dark:bg-black dark:text-white transition-colors duration-300">
+    <nav className="fixed top-0 left-0 w-full z-100 bg-white text-black shadow-lg dark:bg-black dark:text-white transition-colors duration-300">
       <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
         {/* Logo */}
         <a href="#" className="text-2xl font-bold tracking-wide uppercase">
@@ -54,13 +54,6 @@ const Navbar = ({ theme, setTheme }) => {
 
         {/* Right Section: Theme Toggle & Mobile Menu */}
         <div className="flex items-center gap-4">
-          {/* Dark/Light Mode Toggle */}
-          <button
-            onClick={toggleTheme}
-            className="transition-transform duration-300 hover:scale-110 p-2 bg-gray-200 dark:bg-gray-700 rounded-full"
-          >
-            {theme === 'dark' ? <Sun size={24} /> : <Moon size={24} />}
-          </button>
 
           {/* Mobile Menu Button */}
           <button className="md:hidden" onClick={() => setIsOpen(true)}>

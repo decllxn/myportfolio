@@ -30,20 +30,41 @@ INSTALLED_APPS = [
 
     # Third-party apps
     'rest_framework',
+    'rest_framework.authtoken',
+    'corsheaders',
 
     # Local apps
     'contact',
 ]
 
+
+CORS_ALLOW_ALL_ORIGINS = True  # Change this for production security
+
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+CORS_ALLOW_CREDENTIALS = True  # Allow credentials like cookies & sessions
+CORS_ALLOWED_ORIGINS = [  
+    "http://localhost:5173",  # Allow frontend URL explicitly
+]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+]
+
+# Ensure the CSRF cookie is set in cross-origin requests
+CSRF_COOKIE_HTTPONLY = False  
+CSRF_COOKIE_SAMESITE = None
+CSRF_COOKIE_SECURE = False  # Set to True in production
+
 
 ROOT_URLCONF = 'config.urls'
 
@@ -121,3 +142,11 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework.authentication.SessionAuthentication',
+        'rest_framework.authentication.BasicAuthentication',
+    ),
+}

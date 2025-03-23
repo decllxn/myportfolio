@@ -5,26 +5,27 @@ import { FaExternalLinkAlt, FaGithub } from "react-icons/fa";
 const projects = [
   {
     name: "Portfolio Website",
-    description: "A sleek and interactive portfolio showcasing my projects, built with React and Django.",
+    description: "A visually striking and interactive portfolio, crafted with Django, React, and Tailwind CSS to showcase my expertise and projects in a seamless experience.",
     liveLink: "#",
     githubLink: "https://github.com/decllxn/myportfolio",
     image: "/Portfolio.jpg", 
   },
   {
-    name: "API Management System",
-    description: "A RESTful API management platform with authentication and monitoring.",
+    name: "Event Management API",
+    description: "A powerful RESTful API designed for seamless event management, featuring integrated ticket payments, authentication, and third-party services for an optimized user experience.",
     liveLink: "#",
     githubLink: "https://github.com/decllxn/event-management-api",
     image: "/API.avif",
   },
   {
-    name: "E-commerce Platform",
-    description: "A fully functional e-commerce website with product management and payments.",
+    name: "Supermarket Showcase Website",
+    description: "An elegant and modern online presence for a supermarket, designed to enhance brand identity with an aesthetically pleasing interface and engaging user experience.",
     liveLink: "https://supermarketbeisawa.netlify.app/",
     githubLink: "https://github.com/decllxn/beisawa_completed",
     image: "/Beisawa.jpg",
   },
 ];
+
 
 const cardVariants = {
   hidden: { opacity: 0, y: 50 },
@@ -71,7 +72,7 @@ const ProjectsShowcase = () => {
                 <motion.img
                   src={project.image}
                   alt={project.name}
-                  className="w-full h-56 object-cover transition-transform duration-500 hover:scale-110"
+                  className="w-full h-56 object-contain transition-transform duration-500 hover:scale-105"
                 />
               </div>
 

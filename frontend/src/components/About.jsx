@@ -122,7 +122,7 @@ const About = () => {
           <motion.button
             ref={easterEggRef}
             onClick={handleEasterEggClick}
-            className="absolute bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-md hover:bg-blue-700 transition cursor-pointer"
+            className="absolute bg-blue-600 text-white w-12 h-12 flex items-center justify-center rounded-full shadow-md hover:bg-blue-700 transition cursor-pointer z-50"
             style={{ left: easterEggPosition.x, top: easterEggPosition.y }}
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
